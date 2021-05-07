@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "UserReceivedEvent",
+  "namespace": "com.user.signup.user.event",
+  "fields": [
+    {
+      "name": "email",
+      "type": ["string"]
+    },
+    {
+      "name": "name",
+      "type": ["string"]
+    },
+    {
+      "name": "status",
+      "type": ["string"]
+    }
+  ]
+}

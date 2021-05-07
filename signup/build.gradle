@@ -1,4 +1,5 @@
 plugins {
+    id 'com.commercehub.gradle.plugin.avro' version '0.99.99'
     id 'org.springframework.boot' version '2.4.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
@@ -16,6 +17,9 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://packages.confluent.io/maven/'
+    }
 }
 
 ext {
@@ -23,12 +27,14 @@ ext {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+    implementation 'io.confluent:kafka-avro-serializer:5.5.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -45,3 +51,14 @@ dependencyManagement {
 test {
     useJUnitPlatform()
 }
+
+avro {
+    fieldVisibility = "PRIVATE"
+}
+
+generateAvroJava {
+    source 'src/main/resources/avro'
+//    outputDir = file 'src/main/java/avro'
+}
+
+compileJava.source(generateAvroJava.outputs)
